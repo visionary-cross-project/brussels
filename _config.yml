@@ -1,0 +1,57 @@
+# =========================================================
+# Brussels Cross — site settings
+# =========================================================
+# Part of the Visionary Cross Project. This repository holds the Brussels Cross
+# site. Unlike Ruthwell and Bewcastle (hosted in the visionary-cross-project
+# org), Brussels is published from a separate account, so it lives on a
+# different domain and links out to the hub with full URLs (see hub_url and
+# crosses below).
+
+title: Brussels Cross
+email: humanitiesinnovationlab@gmail.com
+description: >-
+  A digital edition of the Brussels Cross, part of the Visionary Cross Project.
+
+# baseurl: the subpath this project site is served from
+# (jocelyn-mcknight.github.io/brussels); the Pages workflow sets it at build.
+baseurl: ""
+# url: the base hostname & protocol for the published site.
+url: "https://jocelyn-mcknight.github.io"
+
+# remote_theme: pull the shared layouts, includes, and styles from the hub repo
+# at build time, just like the other crosses.
+remote_theme: visionary-cross-project/visionary-cross-project.github.io
+
+# hub_url: Brussels is on a different domain than the hub, so the shared nav,
+# footer, and header must reach the hub pages (frontmatter/backmatter/home) via
+# this full URL. Same-domain repos leave this empty.
+hub_url: "https://visionary-cross-project.github.io"
+
+# Per-cross links for the shared nav. Ruthwell and Bewcastle live on the hub's
+# domain, so they are full URLs from here; Brussels is this repo (root-relative).
+crosses:
+  ruthwell: "https://visionary-cross-project.github.io/ruthwell"
+  bewcastle: "https://visionary-cross-project.github.io/bewcastle"
+  brussels: "/brussels"
+
+# Shared header (rendered by the theme's _includes/header.html). header_image is
+# baseurl-relative, so it resolves to /brussels/assets/img/head.jpg.
+header_title: "Brussels"
+header_image: "/assets/img/head.jpg"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-remote-theme
+
+# Sass: partials and assets/css/main.scss live in the remote theme.
+sass:
+  style: expanded
+
+# Exclude from processing.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor/
+  - README.md

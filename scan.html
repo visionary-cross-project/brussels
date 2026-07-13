@@ -2,23 +2,57 @@
 layout: default
 title: "Scanning Brussels"
 ---
-<main>
-  <div class="container">
+<main class="article-page">
+    <h1>Scanning the Brussels Cross</h1>
 
-    <div class="left">       
-      <img src="/brussels/assets/img/brussels.png" alt="Project Image" class="hover-image">
-    </div>
+<h2>Scanning</h2>
 
-    <div class="right">
-      <div class="info">
-        <h1>Scanning the Brussels Cross</h1>
+<p>The scanning process for the Brussels Cross dates back to before the inception of the Visionary Cross Project. In 2003, Christopher Fee began a project called “The Anglo-Saxon Visionary Cross: A Prototype Student Edition, Senior Seminar, and Scholarly Electronic Edition,” which had the ultimate goal of making a digital edition from images of selected crosses rather than creating 3D models, as the Visionary Cross Project would later do. In 2005, Fee brought a team to Brussels to participate in five days of photography. The team included Christopher Fee, Graeff Professor of English at Gettysburg College and Principal Investigator; Martin Foys, Associate Professor of English at Hood College—now Nancy C. Hoefs Professor of English at the University of Wisconsin–Madison—Consultant on the Brussels Cross; Oliver Gibbon, Technological Consultant and Imaging Expert on the Brussels Cross; and Daniel O'Donnell, Associate Professor of English at the University of Lethbridge, Consultant on the Brussels Cross.</p>
 
-        <p> 
-          Coming soon!
-        </p>
+<p>On the first day, the team arrived at the Cathedral of St. Michael and St. Gudula. They were responsible for taking the Brussels Cross out of its protective case and carefully removing any dust or cobwebs that had accumulated on it over the years. This step was necessary to get the highest quality images for processing, but it was also slow work because they could not risk damaging the cross. This was the main task for the first day, along with setting up the turntable and identifying angles for the next several days.</p>
 
-      </div>
-    </div>
+<p>On each day, there were several runs; each run is a consecutive sequence of photos taken of the Brussels Cross as it turns and typically represented a loop or partial loop of the cross. The second day had 11 runs and was dedicated to capturing all the angles on the sides/edge of the cross. For this, they set up the camera, which was a Canon EOS 10D, on a stationary stand and laid the cross on a turntable. The turntable slowly rotated as the camera captured photos. The runs varied in exposure time, from ½ second to 2 seconds, as well as in focal length, from 50mm to 100mm. There were two different angles from the turntable and distances from the cross within these 11 runs. Figure 1 shows an estimation (with a few imperfections) of where the camera angles were during capturing, made with RealityScan (2.0.1); the white dots around the white square outline with the point cloud represent the camera angle.</p>
 
-  </div>
+<figure style="margin: 2rem 0; text-align: center;">
+  <img src="/brussels/assets/img/scanning-fig1.png" alt="RealityScan estimation of the turntable camera angles for the Brussels Cross" style="max-width: 100%; height: auto; border-radius: 6px;" />
+  <figcaption style="margin-top: 0.5rem; font-size: 0.92rem; font-style: italic;">Figure 1: RealityScan estimation of turn table camera angles</figcaption>
+</figure>
+
+<p>The third day of capturing was focused on the y-axis of the cross, and there were four runs. For this, the team stood the cross up using the wooden handle that was already attached to the bottom of the cross and rotated it while the camera remained stationary. Again, the runs varied, with some having exposure times from 1/8 second to 1/3 second, and others having focal lengths between 100mm and 50mm. There were three angles: one straight on the x-axis, one slightly above, and one slightly below. These runs were generally taken from further away from the cross than the fourth day, but because the cross stayed in the same position from day three to four, we chose to model the cameras together on one model for simplicity's sake. In figure 2, the loops near the 90 degree mark that are further out are from day three.</p>
+
+<p>The fourth day was arguably the most complicated day for photography, as the camera had to be perfectly set up to capture many different angles. Starting at 90 degrees, the camera was moved up by 7 degrees for every run. This resulted in 13 runs and angles, allowing the team to capture the full top 90 degrees of the cross. This was the work of Oliver Gibbon, a student at Gettysburg College. The exposure time was 1/3 second and the focal length was 50mm. Unfortunately, the bottom 90 degrees were not captured in this same way. In figure 2, the 13 loops can clearly be seen making a dome on the top half of the cross.</p>
+
+<figure style="margin: 2rem 0; text-align: center;">
+  <img src="/brussels/assets/img/scanning-fig2.png" alt="RealityScan estimation of the standing camera angles for the Brussels Cross" style="max-width: 100%; height: auto; border-radius: 6px;" />
+  <figcaption style="margin-top: 0.5rem; font-size: 0.92rem; font-style: italic;">Figure 2: RealityScan estimation of standing camera angles</figcaption>
+</figure>
+
+<p>On the last day, the team focused on taking detailed close-up pictures of the engravings, the Old English inscriptions, and other details on the cross. This was done in nine runs, although there were not loops around the cross, just detailed pictures of certain spots.</p>
+
+<p>After the photography campaign, the pictures that came to the Visionary Cross Project from Dan O’Donnell were kept on a hard drive until January 2017, when Gurpreet Singh, who was the project manager of the Visionary Cross Project from 2015 to 2021, organized all the raw CRW photos by their days and runs and placed them on Zenodo.</p>
+
+<h2>Processing</h2>
+
+<p>The 3D model for the Brussels Cross was processed twice. From 2019 to 2026, the project used a model made by Giacomo Cerretini, a student in Informatica Umanistica at Università di Pisa, under the supervision of Roberto Rosselli Del Turco. This was done during a three-month period from August to October 2019 and was funded by the University of Lethbridge. Cerretini modelled the cross in Blender and then began editing the photographs in Photoshop in order to make textures that could be applied to the model. This was done by finding the best photographs at the right angles for the front, back, top, and then for each side, finding photographs for a lateral top and bottom, an under and over arm, and the side tip. The bottom did not need to be textured because Cerretini did not have the holding stick on the model. The model was also missing the textures for the bottom underarms of the Cross for many years, because they were recovered. Then, using Blender, he attached the textures to the right spots on the model and exported the file in .obj format so that it could be transported to MeshLab for final processing before being brought to 3DHOP in .ply form.</p>
+
+<p>The reason for using Blender to model the Brussels Cross in the first place was because, in 2019, the Visionary Cross Project was having issues creating a model using photogrammetry. The Brussels Cross is very shiny, which was causing issues in the processing, and there were some wobbles in the camera and turntable. By 2026, however, we were able to try again and obtain better results.</p>
+
+<p>The second model of the Brussels Cross was made by Jocelyn McKnight from June 25 to July 12, 2026. She started the process by taking just the raw photos in .CRW form and organizing them by day, thus removing the separation between each run. Working primarily with the second, third, and fourth days, she went through all the photos and removed some unusable ones that didn’t show the cross at all, as well as any repeats. After this, she processed the photos with a Python script that was written by Claude Code with prompting. The script batch-developed the images into 16-bit TIFF files. It also locked the white balance to a single reference image and turned off automatic brightness and tone adjustments so that all images would be processed consistently. This created higher-quality and more stable images where the shininess from the metal would not interfere with the processing. The script also kept the background darker, so that the software would not get distracted by the background when modelling.</p>
+
+<p>After this, the folders for each day were separately put into RealityScan 2.0.1, a semi-open source software that is free for individuals and small businesses that made less than $1 million USD in revenue in the past 12 months, as well as educational institutions and students. All the photos were automatically aligned by RealityScan’s software to create a rudimentary point cloud. After this, masks, which are .png files that tell the software which part of the image to ignore, such as the background, were generated based on the point cloud and then exported back into the folders.</p>
+
+<p>Once all the TIFFs had masks, the turntable photos and then all the photos where the cross was being stood up (Days 3 and 4) were put into RealityScan separately. The standing up photos, which were about 900 all together were automatically aligned by the software, after the positions were confirmed to be generally correct and all photos were in the same component, the camera positions were exported as XMP Metadata in an attempt to keep the camera positions as close to what they were at that point.</p>
+
+<p>After, the 300 ish turn table photos were added in and aligned with the standing photos. The images did not automatically align because RealityScan could not reconcile the differences between the turntable images and the standing images. To align everything, McKnight created control points. This means that she manually aligned photos to five points. The first point was the top middle screw, then the other two were screws on the middle left and middle right side of the cross, finally, there were points on the lowest screw on the left and right side of the cross. This made it possible for RealityScan to realign the images in the correct way and get a more accurate point cloud.</p>
+
+<p>Once the alignment was complete, and a high-quality mesh modelled by RealityScan, McKnight went through and filtered out a small imperfection in the bottom corner of the cross and then repaired the hole. After this, the uncoloured and untextured model was complete.</p>
+
+<h2>Colouring and Texturing</h2>
+
+<p>Because the images all had to be developed to remove any shine and dim the colour, they could not be used to create the textures. For that reason, a second Python script was used to redevelop the CRWs in a way that preserved their original colour and shine. After each raw photo had a new 16-bit TIFF, they were labeled as textured and placed with the tifs that were used for alignment. After, the texturing was set to 16k to ensure the most accurate texture quality as possible. RealityScan created the texture and colour.</p>
+
+<h2>Results</h2>
+
+<p>The result was a 74MB ply model with 2.6 million faces. Although this may seem much smaller and lower quality than the Ruthwell and the Bewcastle Crosses, this is not the case. The Ruthwell and the Bewcastle Cross are more than 4 times the size of the Brussels and they were scanned in the 2010s with far more advanced software than a turntable and a Canon camera. With laser and blue light scans, very fine details can be collected in a way that photogrammetry sometimes misses. Considering the size and technology 2.6 million faces is a respectable amount of detail.</p>
+
 </main>

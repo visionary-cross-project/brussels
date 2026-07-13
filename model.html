@@ -1,26 +1,507 @@
 ---
 layout: default
 title: "Brussels Model"
+viewer: true
 ---
 <main>
-  <div class="container">
+    <div class="viewer-layout">
+      <div id="viewerWrap">
+        <div id="3dhop" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
+          <div id="tdhlg"></div>
 
-    <div class="left">       
-      <img src="/brussels/assets/img/brussels.png" alt="Project Image" class="hover-image">
-    </div>
+          <div id="toolbar">
+            <img id="home" title="Clear State" src="/brussels/3dhop/skins/dark/home.png" onclick="actionsToolbar('home')" /><br/>
+            <img id="zoomin" title="Zoom In" src="/brussels/3dhop/skins/dark/zoomin.png" onclick="actionsToolbar('zoomin')" /><br/>
+            <img id="zoomout" title="Zoom Out" src="/brussels/3dhop/skins/dark/zoomout.png" onclick="actionsToolbar('zoomout')" /><br/>
+            <img id="light" title="Enable Light Control" src="/brussels/3dhop/skins/dark/lightcontrol.png" onclick="actionsToolbar('light')" /><br/>
+            <img id="screenshot" title="Save Screenshot" src="/brussels/3dhop/skins/dark/screenshot.png" onclick="actionsToolbar('screenshot')" /><br/>
+            <img id="full" title="Full Screen" src="/brussels/3dhop/skins/dark/full.png" onclick="actionsToolbar('full')" />
+          </div>
 
-    <div class="right">
-      <div class="info">
-        <h1>Brussels Cross Model</h1>
+          <div id="loadingOverlay">
+            <div class="loading-box">
+              <div class="spinner"></div>
+              <p id="loadingText">Loading model…</p>
+            </div>
+          </div>
 
-        <p> 
-          The view for the model of the Brussels Cross is coming soon! Use the 
-          <a href="https://vcg.isti.cnr.it/activities/visionarycross/crosses/bruxelles.html" target="_blank">model</a> 
-          hosted at ISTI-CNR while we work.
-        </p>
+          <div id="movePad" aria-label="Move view">
+            <table id="mvc_table">
+              <tbody>
+                <tr>
+                  <td>
+                    <img class="move_ up" id="move_up" title="Move Up" src="/brussels/assets/img/Arrow.png" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <img class="move_ down" id="move_down" title="Move Down" src="/brussels/assets/img/Arrow.png" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
+          <button id="fullscreen-btn" title="Toggle Full Screen" onclick="toggleFullscreen()">
+            <img src="/brussels/3dhop/skins/dark/full.png" alt="Full Screen" />
+          </button>
+
+          <canvas id="draw-canvas"></canvas>
+        </div>
       </div>
+
+      <aside id="infoPanel">
+        <div class="side-tabs">
+          <button class="tab-button active" type="button" onclick="openInfoTab('panels')">
+            Panels
+          </button>
+
+          <button class="tab-button" type="button" onclick="openInfoTab('poem')">
+            Runes
+          </button>
+        </div>
+
+        <div id="panels-content" class="tab-content active">
+          <section class="panel-section">
+            <h2>Explore the Brussels Cross</h2>
+
+            <p class="panel-intro">
+              Select a direction to turn the model. Select a panel name to highlight it on the cross.
+            </p>
+
+            <div class="direction-row">
+              <button class="direction-card active" type="button" data-direction="front" onclick="setActiveDirection('front')">
+                <span>Front</span>
+              </button>
+
+              <button class="direction-card" type="button" data-direction="back" onclick="setActiveDirection('back')">
+                <span>Back</span>
+              </button>
+
+              <button class="direction-card" type="button" data-direction="left" onclick="setActiveDirection('left')">
+                <span>Left</span>
+              </button>
+
+              <button class="direction-card" type="button" data-direction="right" onclick="setActiveDirection('right')">
+                <span>Right</span>
+              </button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="panel-links">
+              <div class="panel-item" data-panel-id="none">
+                <button type="button" class="panel-name" onclick="clearPanelSelection()">
+                  None
+                </button>
+                <p>Clear the selected highlight.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div id="poem-content" class="tab-content">
+          <section class="panel-section">
+            <h2>The Poem</h2>
+
+            <p>
+              This section can contain the poetic inscription, transcription, translation, or commentary.
+            </p>
+          </section>
+        </div>
+      </aside>
     </div>
 
-  </div>
-</main>
+    <script>
+      var presenter = null;
+      var activeSpot = null;
+
+      var spotIds = [
+      ];
+
+      function setup3dhop() {
+        presenter = new Presenter("draw-canvas");
+
+        presenter.setScene({
+          meshes: {
+            brussels: { url: "/brussels/assets/models/brussels.nxz" },
+          },
+
+          modelInstances: {
+            brussels: {
+              mesh: "brussels",
+              color: [0.8, 0.7, 0.75],
+              visible: true
+            }
+          },
+
+          trackball: {
+            type: TurntablePanTrackball,
+            trackOptions: {
+              startPhi: 0.0,
+              startTheta: 0.0,
+              startDistance: 2.0,
+              minMaxPhi: [-180, 180],
+              minMaxTheta: [-85.0, 85.0],
+              minMaxDist: [0.005, 140.0],
+              startPanX: 0.0,
+              startPanY: 0.0,
+              startPanZ: 0.0,
+              minMaxPanX: [-5.0, 5.0],
+              minMaxPanY: [-20.0, 20.0],
+              minMaxPanZ: [-5.0, 5.0]
+            }
+          }
+        });
+
+        presenter.enableOnHover(true);
+        presenter._onPickedSpot = onPickedSpot;
+        presenter._onEnterSpot = onEnterSpot;
+        presenter._onLeaveSpot = onLeaveSpot;
+
+        presenter.resetTrackball();
+
+        setTimeout(function () {
+          presenter.repaint();
+        }, 120);
+      }
+
+      function onEnterSpot(id) {
+        setActivePanelItem(id);
+      }
+
+      function onLeaveSpot(id) {
+        unhoverPanel();
+
+        if (activeSpot) {
+          setActivePanelItem(activeSpot);
+        } else {
+          clearActivePanelItem();
+        }
+      }
+
+      function clearHighlights() {
+        if (!presenter) return;
+
+        for (var i = 0; i < spotIds.length; i++) {
+          presenter.setSpotVisibilityByName(spotIds[i], false, false);
+        }
+
+        presenter.repaint();
+      }
+
+      function showHighlight(id) {
+        if (!presenter) return;
+
+        clearHighlights();
+
+        presenter.setSpotVisibilityByName(id, true, true);
+        presenter.enableOnHover(true);
+        presenter.repaint();
+      }
+
+      var panelToFace = {
+      };
+
+      function highlightPanel(id) {
+        activeSpot = id;
+        showHighlight(id);
+        setActivePanelItem(id);
+
+        var face = panelToFace[id];
+
+        if (face) {
+          setActiveDirection(face);
+        } else {
+          updateUrlState();
+        }
+      }
+
+      function hoverPanel(id) {
+        showHighlight(id);
+      }
+
+      function unhoverPanel() {
+        if (activeSpot) {
+          showHighlight(activeSpot);
+        } else {
+          clearHighlights();
+        }
+      }
+
+      function onPickedSpot(id) {
+        highlightPanel(id);
+      }
+
+      function clearPanelSelection() {
+        activeSpot = null;
+        clearHighlights();
+        clearActivePanelItem();
+
+        var noneItem = document.querySelector('[data-panel-id="none"]');
+        if (noneItem) noneItem.classList.add("active");
+
+        updateUrlState();
+      }
+
+      function clearActivePanelItem() {
+        var items = document.querySelectorAll(".panel-item");
+
+        items.forEach(function (item) {
+          item.classList.remove("active");
+        });
+      }
+
+      function setActivePanelItem(id) {
+        clearActivePanelItem();
+
+        var activeItem = document.querySelector('[data-panel-id="' + id + '"]');
+
+        if (activeItem) {
+          activeItem.classList.add("active");
+        }
+      }
+
+      var activeFace = null;
+      var validFaces = ["front", "back", "left", "right"];
+
+      function faceDirection(direction) {
+        if (!presenter) return;
+
+        var my_pos = presenter.getTrackballPosition();
+
+        switch (direction) {
+          case "front":
+            my_pos[0] = 0;
+            break;
+          case "right":
+            my_pos[0] = 90;
+            break;
+          case "back":
+            my_pos[0] = 180;
+            break;
+          case "left":
+            my_pos[0] = -90;
+            break;
+          default:
+            return;
+        }
+
+        activeFace = direction;
+        presenter.animateToTrackballPosition(my_pos);
+        updateUrlState();
+      }
+
+      function setActiveDirection(direction) {
+        var directionButtons = document.querySelectorAll(".direction-card");
+
+        directionButtons.forEach(function (button) {
+          button.classList.remove("active");
+        });
+
+        var activeButton = document.querySelector('[data-direction="' + direction + '"]');
+
+        if (activeButton) {
+          activeButton.classList.add("active");
+        }
+
+        faceDirection(direction);
+      }
+
+      function updateUrlState() {
+        var parts = [];
+
+        if (activeFace) parts.push("face=" + encodeURIComponent(activeFace));
+        if (activeSpot) parts.push("panel=" + encodeURIComponent(activeSpot));
+
+        var hash = parts.length ? "#" + parts.join("&") : "";
+
+        history.replaceState(null, "", location.pathname + location.search + hash);
+      }
+
+      function clearAllState() {
+        activeFace = null;
+        activeSpot = null;
+
+        clearHighlights();
+        clearActivePanelItem();
+
+        var directionButtons = document.querySelectorAll(".direction-card");
+
+        directionButtons.forEach(function (button) {
+          button.classList.remove("active");
+        });
+
+        if (presenter) {
+          presenter.resetTrackball();
+        }
+
+        updateUrlState();
+      }
+
+      function applyUrlState() {
+        if (!location.hash) return;
+
+        var params = {};
+
+        location.hash.replace(/^#/, "").split("&").forEach(function (kv) {
+          var pair = kv.split("=");
+
+          if (pair[0]) {
+            params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
+          }
+        });
+
+        if (params.face && validFaces.indexOf(params.face) !== -1) {
+          faceDirection(params.face);
+        }
+
+        if (params.panel && spotIds.indexOf(params.panel) !== -1) {
+          highlightPanel(params.panel);
+        }
+      }
+
+      function toggleFullscreen() {
+        var el = document.getElementById("3dhop");
+        var btn = document.querySelector("#fullscreen-btn img");
+
+        if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
+          (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen).call(document);
+          btn.src = "/brussels/3dhop/skins/dark/full.png";
+          btn.alt = "Full Screen";
+        } else {
+          (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen).call(el);
+          btn.src = "/brussels/3dhop/skins/dark/full_on.png";
+          btn.alt = "Exit Full Screen";
+        }
+      }
+
+      function actionsToolbar(action) {
+        if (!presenter) return;
+
+        if (action === "home") clearAllState();
+        else if (action === "zoomin") presenter.zoomIn();
+        else if (action === "zoomout") presenter.zoomOut();
+        else if (action === "light") presenter.enableLightTrackball(!presenter.isLightTrackballEnabled());
+        else if (action === "screenshot") presenter.saveScreenshot();
+        else if (action === "full") presenter.fullscreen();
+        else if (
+          action === "move_up" ||
+          action === "move_down" ||
+          action === "move_left" ||
+          action === "move_right"
+        ) {
+          step(action);
+        }
+      }
+
+      function step(action) {
+        if (!presenter) return;
+
+        var my_pos = presenter.getTrackballPosition();
+        var vstep = 0.10;
+        var hstep = 0.10;
+
+        switch (action) {
+          case "move_up":
+            my_pos[3] += vstep;
+            presenter.animateToTrackballPosition(my_pos);
+            break;
+
+          case "move_down":
+            my_pos[3] -= vstep;
+            presenter.animateToTrackballPosition(my_pos);
+            break;
+
+          case "move_right":
+            var gr1 = Math.PI * my_pos[0] / 180;
+            my_pos[2] -= hstep * Math.cos(gr1);
+            my_pos[4] += hstep * Math.sin(gr1);
+            presenter.animateToTrackballPosition(my_pos);
+            break;
+
+          case "move_left":
+            var gr2 = Math.PI * my_pos[0] / 180;
+            my_pos[2] += hstep * Math.cos(gr2);
+            my_pos[4] -= hstep * Math.sin(gr2);
+            presenter.animateToTrackballPosition(my_pos);
+            break;
+        }
+      }
+
+      function showLoading(message) {
+        var overlay = document.getElementById("loadingOverlay");
+        var text = document.getElementById("loadingText");
+
+        if (text && message) {
+          text.textContent = message;
+        }
+
+        if (overlay) {
+          overlay.style.display = "flex";
+        }
+      }
+
+      function hideLoading() {
+        var overlay = document.getElementById("loadingOverlay");
+
+        if (overlay) {
+          overlay.style.display = "none";
+        }
+      }
+
+      function hookMovePad() {
+        function bind(id) {
+          var el = document.getElementById(id);
+          if (!el) return;
+
+          el.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            actionsToolbar(id);
+          });
+        }
+
+        bind("move_up");
+        bind("move_down");
+      }
+
+      function openInfoTab(tabName) {
+        var tabs = document.querySelectorAll(".tab-button");
+        var contents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach(function (tab) {
+          tab.classList.remove("active");
+        });
+
+        contents.forEach(function (content) {
+          content.classList.remove("active");
+        });
+
+        if (tabName === "poem") {
+          document.querySelector(".tab-button:nth-child(2)").classList.add("active");
+          document.getElementById("poem-content").classList.add("active");
+        } else {
+          document.querySelector(".tab-button:nth-child(1)").classList.add("active");
+          document.getElementById("panels-content").classList.add("active");
+        }
+      }
+
+      $(document).ready(function () {
+        showLoading("Loading model...");
+
+        init3dhop();
+        setup3dhop();
+        hookMovePad();
+
+        setTimeout(function () {
+          hideLoading();
+          applyUrlState();
+        }, 1800);
+      });
+
+      window.addEventListener("resize", function () {
+        if (presenter) presenter.repaint();
+      });
+    </script>
+  </main>

@@ -15,7 +15,7 @@ description: >-
 # relative_url resolve under /brussels. The Pages workflow sets it at build.
 baseurl: ""
 # url: the base hostname & protocol for the published site.
-url: "https://visionary-cross-project.github.io"
+url: "https://sandbox.humanitiesinnovationlab.ca"
 
 # remote_theme: pull the shared layouts, includes, and styles from the hub repo
 # at build time, just like the other crosses.

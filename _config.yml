@@ -2,8 +2,8 @@
 # Brussels Cross — site settings
 # =========================================================
 # Part of the Visionary Cross Project. This repository holds the Brussels Cross
-# site. Published as a project site under the shared domain
-# (visionarycross.humanitiesinnovationlab.ca/brussels), exactly like Ruthwell and
+# site. Published as a project site under the hub's domain
+# (visionary-cross-project.github.io/brussels), exactly like Ruthwell and
 # Bewcastle.
 
 title: Brussels Cross
@@ -15,20 +15,11 @@ description: >-
 # relative_url resolve under /brussels. The Pages workflow sets it at build.
 baseurl: ""
 # url: the base hostname & protocol for the published site.
-url: "https://visionarycross.humanitiesinnovationlab.ca"
+url: "https://sandbox.humanitiesinnovationlab.ca"
 
-# remote_theme: pull the shared layouts, includes, and styles from the edition
+# remote_theme: pull the shared layouts, includes, and styles from the hub repo
 # at build time, just like the other crosses.
-remote_theme: visionary-cross-project/edition
-
-# edition_url: the subpath the edition is served from. The edition is now its
-# own repo (visionary-cross-project/edition), published as a project site
-# alongside the crosses; the domain root belongs to the separate project
-# website. The shared chrome (nav, header, footer) prefixes its frontmatter,
-# backmatter, and home links with this, exactly as it does with `crosses`
-# below. It must be set in every repo that uses the theme, because
-# remote_theme supplies the templates but each site keeps its own config.
-edition_url: "/edition"
+remote_theme: visionary-cross-project/visionary-cross-project.github.io
 
 # Per-cross links for the shared nav. All three crosses live on this domain, so
 # these are root-relative paths.
